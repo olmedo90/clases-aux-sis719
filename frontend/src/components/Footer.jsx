@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Outlet, Link } from 'react-router-dom';
 import '../App.css';
 export function Footer  (props) {
   return (
@@ -11,9 +12,14 @@ export function Footer  (props) {
 }
 export function Sis719  () {
     return (
-      <footer>
-          <h4>SIS-719</h4>
-      </footer>
+      <div>
+        
+        <h4>SIS-719</h4>
+        <Link to={'auxiliatura'}>Auxiliatura</Link><br />
+        <Link to={'/'}>principal</Link>
+
+        <Outlet/>
+      </div>
     )
   }
 
