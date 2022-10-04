@@ -6,15 +6,23 @@ import { Index, Mensajes, Publicaciones, Dashboard } from './components/Index';
 import { Seminario } from './components/Seminario';
 import { useState } from 'react';
 import { ProtectedRoutes } from './routes/ProtectedRoutes';
+import { Navigations } from './routes/Navigations';
+import {  ThemeProvider } from '@material-ui/core';
+import {Colors} from './utils/Colors';
+import { Usurs, Insertar } from './components/users/Usurs';
+import {Theme} from './components/Laboratorio3/Theme'
+import {Palette} from './components/Laboratorio3/palette/Index'
+import ViewPort from './components/Laboratorio3/ViewPort';
 function App() {
   const nombre = 'Edson Olmedo Copa';
   const titulo = 'Auxiliatura de Seminario de Sistemas';
   const [user, setUser] = useState(null);
+ 
   const login = () => {
     setUser({
       id: 1,
       name: 'edson',
-      rol: 'admin'
+      rol: ''
     })
   }
   const logout = () => {
@@ -22,67 +30,53 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="App">
-        <Emcabezado
-          titulos={titulo}
-          nombre={nombre}
-        />
-        {
-          user ?
-            <button onClick={logout}>logout</button>
-            :
-            <button onClick={login}>login</button>
+    <ThemeProvider theme={Colors}>
+      <Router>
+        <div className="App">
+          <Emcabezado
+            titulos={titulo}
+            nombre={nombre}
+          />
+          
+          <Navigations login={login} logout={logout} user={user} />
 
-        }
-        <Navigations />
-        <div>
-          <Routes>
-            <Route path='/' element={<Index />}></Route>
-            <Route path='/sis719/*' element={<Sis719 />}>
-              <Route path='auxiliatura' element={<Seminario />}></Route>
-            </Route>
+          <div className='containers'>
+            <Routes>
+              <Route path='/users/*' element={<Usurs/>}>
+                  <Route path='insertar' element={<Insertar/>}></Route>
+              </Route>
+              
+              <Route path='/' element={<Theme>
+                <ViewPort/>
+                </Theme>}></Route>
+              <Route path='/index' element={<Index />}></Route>
+              <Route path='/sis719/*' element={<Sis719 />}>
+                <Route path='auxiliatura' element={<Seminario />}></Route>
+              </Route>
 
-            <Route element={<ProtectedRoutes user={user} />}>
-              <Route path='/publicaciones' element={<Publicaciones />} />
-              <Route path='/mensajes' element={<Mensajes />} />
-            </Route>
+              <Route element={<ProtectedRoutes user={user} />}>
+                <Route path='/publicaciones' element={<Publicaciones />} />
+                <Route path='/mensajes' element={<Mensajes />} />
+              </Route>
 
-            <Route path='/dashboard' element={
-              <ProtectedRoutes user={!!user && user.rol.includes('admin')}>
-                <Dashboard />
-              </ProtectedRoutes>
-            } />
+              <Route element={<ProtectedRoutes user={!!user && user.rol.includes('admin')} />}>
+                <Route path='/dashboard' element={<Dashboard />} />
+                {/* <Route path='/users' element={<Users/>} /> */}
+              </Route>
 
-          </Routes>
+            </Routes>
+          </div>
+
+          <Footer
+            nombre={nombre}
+            titulos={titulo}
+
+          />
+
         </div>
-        <Footer
-          nombre={nombre}
-          titulos={titulo}
+      </Router>
+    </ThemeProvider>
 
-        />
-
-      </div>
-    </Router>
   );
 }
 export default App;
-function Navigations() {
-  return <nav>
-    <ul>
-      <li>
-        <Link to={'/sis719'}>seminario de sistemas</Link>
-      </li>
-      <li>
-        <Link to={'/mensajes'}>mensajes</Link>
-      </li>
-      <li>
-        <Link to={'/publicaciones'}>publicaciones</Link>
-      </li>
-      <li>
-        <Link to={'/dashboard'}>dashboard</Link>
-      </li>
-    </ul>
-  </nav>
-
-}

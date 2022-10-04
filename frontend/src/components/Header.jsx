@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@material-ui/core';
 
 const Header = ({titulos, nombre}) => {
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState(true);
     
     const color =()=>{
       setShow(!show);
@@ -15,13 +16,14 @@ const Header = ({titulos, nombre}) => {
     }
     const color2 ={
         background:'#2244d8',
-        color:'#2243d6',
-        border: '4px solid #2243d6'
+        color:'#3ab542',
+        border: '4px solid #000000'
     }
   return (
-    <div style={show ?color1:color2}>
+    <div className='headers' style={show ?color1:color2}>
         <h1>{titulos}</h1>
-        <button onClick={()=>color()}> color</button>
+        <Button variant='contained' color='info' onClick={()=>color()}> color</Button>
+        
     </div>
   )
 }
